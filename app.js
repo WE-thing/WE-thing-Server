@@ -4,6 +4,22 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+
+// .env 읽고 환경설정
+dotenv.config();
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected");
+  })
+  .catch((err) => {
+    console.log(err);
+    console.log("MongoDB Connection Error");
+  });
+
 var indexRouter = require("./routes/index");
 
 var app = express();
