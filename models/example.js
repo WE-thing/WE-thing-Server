@@ -1,4 +1,4 @@
-//예시 파일입니당 참고해서 필요한
+//예시 파일입니당 참고해서 필요한 스키마 만들어주세요 !
 
 const mongoose = require('mongoose');
 
