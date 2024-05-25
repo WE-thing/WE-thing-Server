@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema(
+const roleSchema = new mongoose.Schema(
   {
     id: { type: Number, required: true },
     role: { type: String, required: true },
@@ -12,9 +12,9 @@ const userSchema = new mongoose.Schema(
 );
 // role 빼고는 createAt 추가하기
 
-userSchema.set("toJSON", { virtuals: true });
-userSchema.set("toObject", { virtuals: true });
-userSchema.virtual("users", {
+roleSchema.set("toJSON", { virtuals: true });
+roleSchema.set("toObject", { virtuals: true });
+roleSchema.virtual("users", {
   ref: "User",
   localField: "id",
   foreignField: "role_id",

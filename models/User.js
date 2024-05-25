@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const coupleSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     id: { type: Number, required: true },
     userName: { type: String, required: true},
@@ -19,5 +19,13 @@ const coupleSchema = new mongoose.Schema(
   }
 );
 
-const Couple = mongoose.model("Couple", coupleSchema());
-module.exports = Couple;
+userSchema.set("toJSON", {virtuals: true});
+userSchema.set("toObject", {virtuals: true});
+userSchema.virtual("albums", {
+  ref: "Album",
+  localField: "id",
+  foreignField: "userId",
+});
+
+const User = mongoose.model("User", userSchema());
+module.exports = User;
