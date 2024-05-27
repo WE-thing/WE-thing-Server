@@ -1,18 +1,46 @@
 const mongoose = require("mongoose");
 
-const invitationSchema = new mongoose.Schema(
-  {
-    id: { type: Number, required: true },
-    inviteDescription: { type: String, required: true },
-    weddingDateTime: { type: String, required: true },
-    locationInfo: { type: String, required: true },
+const mongoose = require("mongoose");
+
+// Define the schema
+const invitationSchema = new mongoose.Schema({
+  inviteDescription: {
+    type: String,
+    required: true,
   },
-  {
-    timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  }
-);
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  weddingDateTime: {
+    type: Date,
+    required: true,
+  },
+  locationName: {
+    type: String,
+    required: true,
+  },
+  locationAddress: {
+    type: String,
+    required: true,
+  },
+  locationContact: {
+    type: String,
+    required: true,
+  },
+  galleryImageUrl: {
+    type: String, // 필수 항목 아님
+  },
+  themeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Theme",
+    required: true,
+  },
+  mainPhoto: {
+    type: String,
+    required: true,
+  },
+});
 
 invitationSchema.set("toJSON", { virtuals: true });
 invitationSchema.set("toObject", { virtuals: true });
@@ -22,5 +50,5 @@ invitationSchema.virtual("couples", {
   foreignField: "invitaionId",
 });
 
-const Invitation = mongoose.model("Invitation", invitationSchema());
+const Invitation = mongoose.model("Invitation", invitationSchema);
 module.exports = Invitation;
