@@ -20,8 +20,6 @@ mongoose
     console.log("MongoDB Connection Error");
   });
 
-var indexRouter = require("./routes/index");
-
 var app = express();
 
 app.use(logger("dev"));
@@ -32,6 +30,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // app.use("/", indexRouter);
 // app.use("/users", usersRouter);
+
+var indexRouter = require("./routes/api/index");
+const apiRouter = require("./routes/api");
+app.use("/api", apiRouter);
 
 app.get("/", function (req, res) {
   // console.log(req);
