@@ -45,14 +45,37 @@ app.get("/", function (req, res) {
 });
 
 const server = http.createServer(app).listen(3001);
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+const roomIdMap = {};
 
 io.on("connection", (socket) => {
   socket.on("message", (message) => {
     socket.emit("message", message);
-    console.log("hello............");
+    console.log("hello............", message);
+  });
+  socket.on("room:join", (roomId) => {
+    if (roomIdMap.roomId) {
+      socket.join(roomId);
+      roomIdMap.roomId.push(socket.id);
+    } else {
+      roomIdMap.roomId = [socket.id];
+      socket.join(roomId);
+    }
+  });
+  socket.on("room:msg", (roomId, message) => {
+    if (roomIdMap.roomId) {
+      io.to(roomId).emit("msg:received", message);
+    }
   });
 });
+
+// 해당하는 청첩장 요청이 왔을때, roomId를 청첩장 id로 하면 unique한 값이 나온다.
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
