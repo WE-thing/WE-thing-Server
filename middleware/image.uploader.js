@@ -22,6 +22,7 @@ const imageUploader = multer({
         bucket: process.env.AWS_S3_BUCKET_NAME,   // Bucket 이름
         contentType: multerS3.AUTO_CONTENT_TYPE,  // Content-type, 자동으로 찾도록 설정
         key: (req, file, callback) => {           // 파일명
+            console.log("여기여기",req.query.directory);
             const uploadDirectory = req.query.directory ?? '';  // 디렉토리 path 설정을 위해서
             const extension = path.extname(file.originalname);  // 파일 이름 얻어오기
             const uuid = createUUID();                          // UUID 생성
@@ -35,7 +36,7 @@ const imageUploader = multer({
     }),
 
     // 이미지 용량 제한 (20MB)
-    limits: { fileSize: 20 * 1024 * 1024},
+    limits: { fileSize: 100 * 1024 * 1024},
 });
 
 module.exports = { imageUploader };
