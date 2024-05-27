@@ -4,14 +4,25 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+
+// .env 읽고 환경설정
+dotenv.config();
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected");
+  })
+  .catch((err) => {
+    console.log(err);
+    console.log("MongoDB Connection Error");
+  });
+
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
 
 var app = express();
-
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -19,8 +30,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+// app.use("/", indexRouter);
+// app.use("/users", usersRouter);
+
+app.get("/", function (req, res) {
+  // console.log(req);
+  // console.log(req.headers);
+  res.send("Hello World!");
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
