@@ -3,6 +3,9 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const http = require("http");
+const socketIO = require("socket.io");
+const moment = require("moment");
 
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
@@ -39,6 +42,16 @@ app.get("/", function (req, res) {
   // console.log(req);
   // console.log(req.headers);
   res.send("Hello World!");
+});
+
+const server = http.createServer(app).listen(3001);
+const io = socketIO(server);
+
+io.on("connection", (socket) => {
+  socket.on("message", (message) => {
+    socket.emit("message", message);
+    console.log("hello............");
+  });
 });
 
 // catch 404 and forward to error handler
