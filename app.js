@@ -28,12 +28,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+const apiRouter = require("./routes/api");
+app.use("/api", apiRouter);
+
 // app.use("/", indexRouter);
 // app.use("/users", usersRouter);
 
 var indexRouter = require("./routes/api/index");
-const apiRouter = require("./routes/api");
-app.use("/api", apiRouter);
 
 app.get("/", function (req, res) {
   // console.log(req);
@@ -54,7 +55,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.send(err.message);
 });
 
 module.exports = app;
