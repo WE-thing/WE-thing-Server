@@ -51,6 +51,14 @@ const invitationSchema = new mongoose.Schema(
     deletedDate: {
       type: Date,
     },
+    person1: {
+      type: String,
+      require: true,
+    },
+    person2: {
+      type: String,
+      require: true,
+    },
   },
   {
     timestamps: true,
