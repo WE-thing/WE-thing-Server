@@ -20,5 +20,5 @@ roleSchema.virtual("users", {
   foreignField: "roleId",
 });
 
-const Role = mongoose.model("Role", roleSchema());
+const Role = mongoose.model("Role", roleSchema);
 module.exports = Role;
