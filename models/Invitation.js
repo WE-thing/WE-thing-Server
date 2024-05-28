@@ -22,5 +22,5 @@ invitationSchema.virtual("couples", {
   foreignField: "invitationId",
 });
 
-const Invitation = mongoose.model("Invitation", invitationSchema());
+const Invitation = mongoose.model("Invitation", invitationSchema);
 module.exports = Invitation;

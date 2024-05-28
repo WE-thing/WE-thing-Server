@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const User = require("../../models/Invitation");
+const Invitation = require("../../models/Invitation");
 
 router.post("/", async (req, res, next) => {
   const { id, inviteDescription, weddingDateTime, locationInfo } = req.body;
@@ -19,3 +19,5 @@ router.post("/", async (req, res, next) => {
       next(err);
     });
 });
+
+module.exports = router;
