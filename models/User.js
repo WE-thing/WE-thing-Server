@@ -10,8 +10,8 @@ const userSchema = new mongoose.Schema(
       ref: "Role",
     },
     phoneNumber: { type: String, required: true },
-    relationShipNumber: { type: Number, required: true },
-    relationShipString: { type: String, required: true },
+    relationshipNumber: { type: Number, required: true },
+    relationshipString: { type: String, required: true },
     attend: Number,
   },
   {
