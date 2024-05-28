@@ -61,18 +61,30 @@ io.on("connection", (socket) => {
     console.log("hello............", message);
   });
   socket.on("room:join", (roomId) => {
-    if (roomIdMap.roomId) {
+    console.log(`Join to Room ${roomId}`);
+    if (roomIdMap[roomId]) {
       socket.join(roomId);
-      roomIdMap.roomId.push(socket.id);
+      roomIdMap[roomId].push(socket.id);
     } else {
-      roomIdMap.roomId = [socket.id];
+      roomIdMap[roomId] = [socket.id];
       socket.join(roomId);
     }
+    console.log(
+      `Current rooms for socket ${socket.id}:`,
+      Array.from(socket.rooms)
+    );
   });
   socket.on("room:msg", (roomId, message) => {
-    if (roomIdMap.roomId) {
-      io.to(roomId).emit("msg:received", message);
-    }
+    console.log(roomIdMap);
+    console.log(`Message to Room ${roomId} with "${message}"`);
+    console.log(
+      `Current rooms for socket ${socket.id}:`,
+      Array.from(socket.rooms)
+    );
+    // if (roomIdMap[roomId]) {
+    // socket.to(roomId).emit("msg:received", message);
+    io.to(roomId).emit("msg:received", message);
+    // }
   });
 });
 
