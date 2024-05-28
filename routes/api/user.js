@@ -12,27 +12,31 @@ router.post("/signup", async (req, res, next) => {
     userName,
     roleId,
     phoneNumber,
-    relationShipNumber,
-    relationShipString,
+    relationshipNumber,
+    relationshipString,
     attend,
   } = req.body;
 
-  User.create({
-    id: id,
-    userName: userName,
-    roleId: roleId,
-    phoneNumber: phoneNumber,
-    relationShipNumber: relationShipNumber,
-    relationShipString: relationShipString,
-    attend: attend,
-  })
-    .then((result) => {
-      res.status(200).json(result);
+  try {
+    User.create({
+      id: id,
+      userName: userName,
+      roleId: roleId,
+      phoneNumber: phoneNumber,
+      relationshipNumber: relationshipNumber,
+      relationshipString: relationshipString,
+      attend: attend,
     })
-    .catch((err) => {
-      res.status(400);
-      next(err);
-    });
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        res.status(400);
+        next(err);
+      });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.get("/login", async (req, res, next) => {
