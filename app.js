@@ -1,9 +1,11 @@
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
+const cors = require("cors");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const http = require("http");
+
 const socketIO = require("socket.io");
 const moment = require("moment");
 const Message = require("./models/Message");
@@ -13,7 +15,6 @@ const mongoose = require("mongoose");
 
 // .env 읽고 환경설정
 dotenv.config();
-
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -25,7 +26,11 @@ mongoose
   });
 
 var app = express();
-
+app.use(
+  cors({
+    origin: "http://localhost:5173", // 프론트엔드 서버의 주소를 여기에 넣습니다.
+  })
+);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
