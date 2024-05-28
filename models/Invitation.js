@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const invitationSchema = new mongoose.Schema({
   inviteDescription: {
@@ -25,6 +26,9 @@ const invitationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  galleryImageUrl: {
+    type: String, // 필수 항목 아님
+  },
   themeId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Theme",
@@ -35,6 +39,9 @@ const invitationSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+// 플러그인 설정
+invitationSchema.plugin(AutoIncrement, { inc_field: "id", start_seq: 1 });
 
 const Invitation = mongoose.model("Invitation", invitationSchema);
 module.exports = Invitation;
