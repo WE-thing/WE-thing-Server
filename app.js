@@ -6,6 +6,7 @@ var logger = require("morgan");
 const http = require("http");
 const socketIO = require("socket.io");
 const moment = require("moment");
+const Message = require("./models/Message");
 
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
@@ -74,15 +75,17 @@ io.on("connection", (socket) => {
       Array.from(socket.rooms)
     );
   });
-  socket.on("room:msg", (roomId, message) => {
-    console.log(roomIdMap);
+  socket.on("room:msg", ({ roomId, userId, message }) => {
     console.log(`Message to Room ${roomId} with "${message}"`);
-    console.log(
-      `Current rooms for socket ${socket.id}:`,
-      Array.from(socket.rooms)
-    );
+
+    Message.mySave({ roomId, userId, message });
+    // console.log(
+    //   `Current rooms for socket ${socket.id}:`,
+    //   Array.from(socket.rooms)
+    // );
     // if (roomIdMap[roomId]) {
     // socket.to(roomId).emit("msg:received", message);
+
     io.to(roomId).emit("msg:received", message);
     // }
   });
