@@ -17,7 +17,7 @@ roleSchema.set("toObject", { virtuals: true });
 roleSchema.virtual("users", {
   ref: "User",
   localField: "id",
-  foreignField: "role_id",
+  foreignField: "roleId",
 });
 
 const Role = mongoose.model("Role", roleSchema());

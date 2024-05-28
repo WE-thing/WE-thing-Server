@@ -19,7 +19,7 @@ invitationSchema.set("toObject", { virtuals: true });
 invitationSchema.virtual("couples", {
   ref: "Couple",
   localField: "id",
-  foreignField: "invitaionId",
+  foreignField: "invitationId",
 });
 
 const Invitation = mongoose.model("Invitation", invitationSchema());

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const coupleSchema = new mongoose.Schema(
   {
     id: { type: Number, required: true },
-    invitaionId: {
+    invitationId: {
       type: Number,
       required: true,
       ref: "Invitation",
