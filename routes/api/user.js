@@ -1,6 +1,27 @@
 var express = require("express");
 var router = express.Router();
 const User = require("../../models/User");
+const { createToken } = require("../../utils/auth");
+
+async function authenticate(req, res, next) {
+  let headerToken = req.headers.authorization;
+  if (!token && headerToken) {
+    token = headerToken.split(" ")[1];
+  }
+  token = token.length > 0 ? token : null;
+  const user = verifyToken(token);
+  req.user = user;
+  next();
+}
+
+async function loginRequired(req, res, next) {
+  if (!req.user) {
+    const error = new Error("login Required.");
+    error.status = 403;
+    next(error);
+  }
+  next();
+}
 
 /**
  * POST ~/api/user/signup
@@ -39,23 +60,19 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-router.get("/login", async (req, res, next) => {
-  const { userName, phoneNumber } = req.body;
-
+router.post("/login", async (req, res, next) => {
   try {
-    User.findOne({
-      userName: userName,
-      phoneNumber: phoneNumber,
-    }).then((result) => {
-      if (result) {
-        res.status(200).json(result);
-      } else {
-        res.status(400).json("존재하지 않는 사용자입니다.");
-      }
-    });
+    const { userName, phoneNumber } = req.body;
+    const user = await User.login(userName, phoneNumber);
+    const tokenMaxAge = 60 * 60 * 24 * 3;
+    const token = createToken(user, tokenMaxAge);
+
+    user.token = token;
+
+    res.status(200).json(user);
   } catch (err) {
-    res.status(400);
-    next(err);
+    res.status(400).json(err.message);
+    // next(err);
   }
 });
 

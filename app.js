@@ -64,7 +64,6 @@ const roomIdMap = {};
 io.on("connection", (socket) => {
   socket.on("message", (message) => {
     socket.emit("message", message);
-    console.log("hello............", message);
   });
   socket.on("room:join", (roomId) => {
     console.log(`Join to Room ${roomId}`);
@@ -75,28 +74,20 @@ io.on("connection", (socket) => {
       roomIdMap[roomId] = [socket.id];
       socket.join(roomId);
     }
-    console.log(
-      `Current rooms for socket ${socket.id}:`,
-      Array.from(socket.rooms)
-    );
   });
-  socket.on("room:msg", ({ roomId, userId, message }) => {
+  socket.on("room:msg", ({ roomId, token, message }) => {
     console.log(`Message to Room ${roomId} with "${message}"`);
 
-    Message.mySave({ roomId, userId, message });
-    // console.log(
-    //   `Current rooms for socket ${socket.id}:`,
-    //   Array.from(socket.rooms)
-    // );
-    // if (roomIdMap[roomId]) {
-    // socket.to(roomId).emit("msg:received", message);
-
-    io.to(roomId).emit("msg:received", message);
-    // }
+    Message.mySave({ roomId, token, message })
+      .then((result) => {
+        console.log("저장됨", result);
+        io.to(roomId).emit("msg:received", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 });
-
-// 해당하는 청첩장 요청이 왔을때, roomId를 청첩장 id로 하면 unique한 값이 나온다.
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

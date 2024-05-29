@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const User = require("./User");
+const { verifyToken } = require("../utils/auth");
 
 const messageSchema = new mongoose.Schema(
   {
@@ -12,6 +14,11 @@ const messageSchema = new mongoose.Schema(
       required: true,
       ref: "User",
     },
+    roleId: {
+      type: Number,
+      required: true,
+      ref: "User",
+    },
     content: { type: String, required: true },
   },
   {
@@ -21,16 +28,24 @@ const messageSchema = new mongoose.Schema(
 
 messageSchema.statics.mySave = async function ({
   roomId: invitationId,
-  userId,
+  token,
   message: content,
 }) {
   try {
-    const message = await this.create({ invitationId, userId, content });
+    const user = verifyToken(token);
+    const { roleId } = await User.findById(user._id);
+    const message = await this.create({
+      invitationId,
+      userId: user._id,
+      roleId,
+      content,
+    });
     return {
       _id: message._id,
       invitationId: invitationId,
-      userId: userId,
+      userId: user._id,
       content: message.content,
+      roleId: roleId,
     };
   } catch (err) {
     throw err;
