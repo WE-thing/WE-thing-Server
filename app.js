@@ -8,6 +8,7 @@ const http = require("http");
 
 const socketIO = require("socket.io");
 const moment = require("moment");
+const Message = require("./models/Message");
 
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
@@ -63,25 +64,30 @@ const roomIdMap = {};
 io.on("connection", (socket) => {
   socket.on("message", (message) => {
     socket.emit("message", message);
-    console.log("hello............", message);
   });
   socket.on("room:join", (roomId) => {
-    if (roomIdMap.roomId) {
+    console.log(`Join to Room ${roomId}`);
+    if (roomIdMap[roomId]) {
       socket.join(roomId);
-      roomIdMap.roomId.push(socket.id);
+      roomIdMap[roomId].push(socket.id);
     } else {
-      roomIdMap.roomId = [socket.id];
+      roomIdMap[roomId] = [socket.id];
       socket.join(roomId);
     }
   });
-  socket.on("room:msg", (roomId, message) => {
-    if (roomIdMap.roomId) {
-      io.to(roomId).emit("msg:received", message);
-    }
+  socket.on("room:msg", ({ roomId, token, message }) => {
+    console.log(`Message to Room ${roomId} with "${message}"`);
+
+    Message.mySave({ roomId, token, message })
+      .then((result) => {
+        console.log("저장됨", result);
+        io.to(roomId).emit("msg:received", result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 });
-
-// 해당하는 청첩장 요청이 왔을때, roomId를 청첩장 id로 하면 unique한 값이 나온다.
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

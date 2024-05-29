@@ -27,5 +27,28 @@ userSchema.virtual("albums", {
   foreignField: "userId",
 });
 
+userSchema.statics.login = async function (userName, phoneNumber) {
+  const user = await this.findOne({ phoneNumber });
+  if (user) {
+    console.log(user);
+    const auth = user.userName === userName;
+    if (auth) {
+      return user.visibleUser;
+    }
+    throw Error("일치하는 이름이 없습니다.");
+  }
+  throw Error(
+    "일치하는 번호가 없습니다.\n참석 여부를 제출했는지 확인해주세요."
+  );
+};
+
+const visibleUser = userSchema.virtual("visibleUser");
+visibleUser.get(function (value, virtual, doc) {
+  return {
+    _id: doc._id,
+    userName: doc.userName,
+  };
+});
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;
