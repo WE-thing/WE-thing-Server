@@ -17,5 +17,5 @@ const coupleSchema = new mongoose.Schema(
   }
 );
 
-const Couple = mongoose.model("Couple", coupleSchema());
+const Couple = mongoose.model("Couple", coupleSchema);
 module.exports = Couple;
