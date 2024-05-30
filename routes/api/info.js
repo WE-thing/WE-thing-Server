@@ -5,7 +5,6 @@ const User = require("../../models/User");
 const { authenticate } = require("./user");
 
 router.get("/", authenticate, async (req, res) => {
-  // console.log("유저유저\n",req.user);
   const user = await User.findById(req.user._id);
 
   const relationshipString =
