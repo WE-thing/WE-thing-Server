@@ -1,17 +1,16 @@
 var express = require("express");
 var router = express.Router();
 const User = require("../../models/User");
-const { createToken } = require("../../utils/auth");
+const { createToken, verifyToken } = require("../../utils/auth");
 
 async function authenticate(req, res, next) {
   let headerToken = req.headers.authorization;
-  if (!token && headerToken) {
-    token = headerToken.split(" ")[1];
+  if (headerToken) {
+    const user = verifyToken(headerToken);
+    req.user = user;
+    next();
   }
-  token = token.length > 0 ? token : null;
-  const user = verifyToken(token);
-  req.user = user;
-  next();
+  else req.user = null;
 }
 
 async function loginRequired(req, res, next) {
@@ -108,4 +107,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = {
+  authenticate,
+  router,
+};
