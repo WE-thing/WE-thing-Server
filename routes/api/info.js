@@ -20,6 +20,7 @@ router.get("/", authenticate, async (req, res) => {
   let result = {
     name: user.userName,
     phoneNumber: user.phoneNumber,
+    relationshipNumber: user.relationshipNumber,
     relationshipString: relationshipString,
   };
   if (user.roleId === 1 || user.roleId === 2) {
