@@ -70,6 +70,6 @@ jobs:
             # Install project dependencies
             npm install --production
             # Restart or start the application with pm2
-            pm2 stop all
-            pm2 delete all
-            pm2 start bin/www
+            pm2 stop backend
+            pm2 delete backend
+            pm2 start bin/www --name backend
