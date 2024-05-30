@@ -38,6 +38,11 @@ router.post("/signup", async (req, res, next) => {
   } = req.body;
 
   try {
+    const existingUser = await User.findOne({ phoneNumber });
+    if (existingUser) {
+      return res.status(400).json({ message: "User aleady exist" });
+    }
+
     User.create({
       id: id,
       userName: userName,
