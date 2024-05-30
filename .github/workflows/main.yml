@@ -54,8 +54,10 @@ jobs:
           script: |
             # Install Node.js and pm2 on Ubuntu
             # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+            curl -sL https://npm.nodesource.com/setup_21.x | sudo bash -
             # sudo nvm install 21.7.3
-            #  npm install -g pm2
+            sudo apt-get install -y node.js
+            npm install -g pm2
             # Navigate to the application directory
             cd /home/ubuntu/wething-backend
             # Install project dependencies
