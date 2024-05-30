@@ -11,7 +11,7 @@ router.get('/', authenticate, async(req, res) => {
     let attend = (user.attend===1) ? "참석" : (user.attend===2) ? "불참" : "미정";
     const result = {
         name: user.userName,
-        phonenNumber: user.phoneNumber,
+        phoneNumber: user.phoneNumber,
         relationshipString: user.relationshipString,
         attend: attend,
     }
