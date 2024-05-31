@@ -9,8 +9,7 @@ async function authenticate(req, res, next) {
     const user = verifyToken(headerToken);
     req.user = user;
     next();
-  }
-  else req.user = null;
+  } else req.user = null;
 }
 
 async function loginRequired(req, res, next) {
@@ -92,12 +91,16 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:userName/:phoneNumber", async (req, res) => {
   try {
-    const user = await User.findOneAndUpdate({ id: req.params.id }, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const user = await User.findOneAndUpdate(
+      { name: req.params.name, phoneNumber: req.params.phoneNumber },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     if (!user) {
       return res.status(404).json({ message: "user not found" });
     }
